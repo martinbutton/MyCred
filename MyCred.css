@@ -1,0 +1,85 @@
+body {
+	background-color: #eee;
+	font-family: 'Slabo 27px', serif;
+	font-size: 18px;
+	color: #333;
+}
+
+.heading {
+	text-align: center;
+	font-size: 42px;
+	padding-bottom: 10px;
+	border-bottom: 2px solid #0000dd;
+	margin-bottom: 40px;
+	text-shadow: 2px 2px 5px #000077;
+	color: #0000dd;
+}
+
+form {
+	width: 70%;
+	margin: auto;
+}
+
+.typedInput {
+	width: 100%;
+	padding: 10px;
+	border-radius: 5px;
+	background-color: #eee;
+	color: black;
+	border: 2px solid #0000dd;
+	font-size: 18px;
+}
+
+select {
+	background-color: #eee;
+	border: 2px solid #0000dd;
+	color: black;
+	width: 100%;
+	font-size: 18px;
+}
+
+.typedInput:focus, select:focus {
+	background-color: #ffffcc;
+	border: 2px solid black;
+}
+
+.formSubmitBtn {
+	padding: 10px;
+	border: 2px solid #009900;
+	color: #009900;
+	background-color: #eee;
+	font-size: 18px;
+	border-radius: 5px;
+	display: inline-block;
+	float: right;
+	transition: color 0.3s, background-color 0.3s;
+}
+
+.formCancelBtn {
+	padding: 10px;
+	border: 2px solid #ff0000;
+	color: #ff0000;
+	background-color: #eee;
+	font-size: 18px;
+	border-radius: 5px;
+	display: inline-block;
+	float: left;
+	transition: color 0.3s, background-color 0.3s;
+}
+
+.formSubmitBtn:hover {
+	background-color: #009900;
+	color: white;
+	cursor: pointer;
+}
+
+.formCancelBtn:hover {
+	background-color: red;
+	color: white;
+	cursor: pointer;
+}
+
+.errorMsg {
+	color: red;
+	margin-bottom: 10px;
+}
