@@ -1,48 +1,77 @@
 <!DOCTYPE html>
 <html>
+<!-- MyCred: User Registration and Authentication program.
+	         User Registration Form.  M.Button             -->
 <head>
 	<title>My Credentials</title>
 	<link href="https://fonts.googleapis.com/css?family=Slabo+27px" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="MyCred.css">
+	<?PHP require "validate.php";?>
 </head>
 <body>
+	<?PHP
+	$formData=Array("name"=>"",
+		"email"=>"",
+		"email2"=>"",
+		"secQ"=>0,
+		"secA"=>"");
+
+	if ($_SERVER["REQUEST_METHOD"] == "POST") {
+		if (regFormValidate()) {
+			echo "Validation Successful!";
+		}
+		else {
+			echo "Validation Failed!";
+		}
+	}
+
+	/* Re-selects the choosen security question when form is reloaded */
+	function optChecked($opt) {
+		global $formData;
+
+		if ($opt==$formData['secQ']) {
+			echo "selected";
+		}
+	}
+	?>
+
 	<div class="heading">My Credentials</div>
 	<div style="text-align: center; margin-bottom: 20px;">Please complete ALL fields of the registration for below:</div>
 	
-	<form>
+	<form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 		Your Name:<br>
-		<input class="typedInput" type="text" name="fullName"><br>
-		<div class="errorMsg"></div>
+		<input class="typedInput" type="text" name="name" value="<?PHP echo $formData['name'];?>"><br>
+		<div class="errorMsg"><?PHP global $formError; echo $formError['name'];?></div>
 
 		Email Address:<br>
-		<input class="typedInput" type="email" name="email"><br>
-		<div class="errorMsg"></div>
+		<input class="typedInput" type="email" name="email" value="<?PHP echo $formData['email'];?>"><br>
+		<div class="errorMsg"><?PHP global $formError; echo $formError['email'];?></div>
 
 		Please enter your Email Address again:<br>
-		<input class="typedInput" type="email" name="email2"><br>
-		<div class="errorMsg"></div>
+		<input class="typedInput" type="email" name="email2" value="<?PHP echo $formData['email2'];?>"><br>
+		<div class="errorMsg"><?PHP global $formError; echo $formError['email2'];?></div>
 
 		Password:<br>
 		<input class="typedInput" type="password" name="password"><br>
-		<div class="errorMsg"></div>
+		<div class="errorMsg"><?PHP global $formError; echo $formError['password'];?></div>
 
 		Please enter your Password again:<br>
 		<input class="typedInput" type="password" name="password2"><br>
-		<div class="errorMsg"></div>
+		<div class="errorMsg"><?PHP global $formError; echo $formError['password2'];?></div>
 
 		Please select a security Question:<br>
 		<select name="secQ">
-			<option value="0">Please select</option>
-			<option value="1">What is your mother maiden mame?</option>
-			<option value="2">What is the name of your first pet?</option>
-			<option value="3">What town were you born in?</option>
-			<option value="4">What is your favorite film?</option>
+			<option value="0" <?PHP optChecked(0);?>>Please select</option>
+			<option value="1" <?PHP optChecked(1);?>>What is your mother maiden mame?</option>
+			<option value="2" <?PHP optChecked(2);?>>What is the name of your first pet?</option>
+			<option value="3" <?PHP optChecked(3);?>>What town were you born in?</option>
+			<option value="4" <?PHP optChecked(4);?>>What is your favorite film?</option>
 		</select><br>
-		<div class="errorMsg"></div>
+		<div class="errorMsg"><?PHP global $formError; echo $formError['secQ'];?></div>
 
-		Please enter in an short answer to your security question:<br>
-		<input class="typedInput" type="text" name="secA"><br>
-		<div class="errorMsg"></div>
+		Please enter in a short answer to your security question:<br>
+		<input class="typedInput" type="text" name="secA" value="<?PHP echo $formData['secA'];?>"><br>
+		<div class="errorMsg"><?PHP global $formError; echo $formError['secA'];?></div>
 
 		<div style="width: 80%; margin: auto; margin-top: 20px;">
 			<input class="formCancelBtn" type="button" name="cancel" value="cancel">
