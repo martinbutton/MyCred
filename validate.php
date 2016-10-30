@@ -33,7 +33,7 @@ function validEmail($email) {
 
 /* Check if a valid name has been entered */
 function validText($name) {
-	if (!preg_match("/^[a-zA-Z ]*$/",$name) || strlen($name)<1) {
+	if (!preg_match("/^[a-zA-Z '!,.-]*$/",$name) || strlen($name)<1) {
   		return false;
 	}
 	return true;
@@ -54,27 +54,31 @@ function validPassword($password) {
 
 function formReturnData() {
 	global $formData;
-	$formData['name']=$_POST['name'];
-	$formData['email']=$_POST['email'];
-	$formData['email2']=$_POST['email2'];
-	$formData['secQ']=$_POST['secQ'];
-	$formData['secA']=$_POST['secA'];
+	$formData['name']=clean_input($_POST['name']);
+	$formData['email']=clean_input($_POST['email']);
+	$formData['email2']=clean_input($_POST['email2']);
+	$formData['password']=clean_input($_POST['password']);
+	$formData['password2']=clean_input($_POST['password2']);
+	$formData['secQ']=clean_input($_POST['secQ']);
+	$formData['secA']=clean_input($_POST['secA']);
+	// TODO: Only grab fields that exist.  Set other to "" depending on what form is being validated.
 }
 
 /* Validate Users Registration Form */
 function regFormValidate() {
-	global $formError;
+	// TODO: Select what data to select and validate against depending on what form is being validated.
+	global $formError, $formData;
 	$validForm=true;
 	formReturnData();
 
 	// Obtain and Clean form data
-	$name=clean_input($_POST['name']);
-	$email=clean_input($_POST['email']);
-	$email2=clean_input($_POST['email2']);
-	$password=clean_input($_POST['password']);
-	$password2=clean_input($_POST['password2']);
-	$secQ=clean_input($_POST['secQ']);
-	$secA=clean_input($_POST['secA']);
+	$name=$formData['name'];
+	$email=$formData['email'];
+	$email2=$formData['email2'];
+	$password=$formData['password'];
+	$password2=$formData['password2'];
+	$secQ=$formData['secQ'];
+	$secA=$formData['secA'];
 
 	// Validate Name
 	if (!validText($name)) {
@@ -98,6 +102,16 @@ function regFormValidate() {
 		$formError['email2']="*Error: Email address does not match the first Email address you provided!";
 	}
 
+	// Check security question and answer has been provided
+	if ($secQ==0) {
+		$validForm=false;
+		$formError['secQ']="*Error: Please select a security question from the above pull down menu! ";
+	}
+	if (!validText($secA)) {
+		$validForm=false;
+		$formError['secA']="*Error: Please provide an answer to your security question!";
+	}
+
 	// Check passwords are valid and match
 	if (!validPassword($password)) {
 		$validForm=false;
@@ -111,16 +125,6 @@ function regFormValidate() {
 		$validForm=false;
 		$formError['password']="*Error: Passwords do not match, please re-enter!";
 		$formError['password2']="*Error: Passwords do not match, please re-enter!";
-	}
-
-	// Check security question and answer has been provided
-	if ($secQ==0) {
-		$validForm=false;
-		$formError['secQ']="*Error: Please select a security question from the above pull down menu! ";
-	}
-	if (!validText($secA)) {
-		$validForm=false;
-		$formError['secA']="*Error: Please provide an answer to your security question!";
 	}
 
 	return $validForm;

@@ -4,24 +4,25 @@
 	         User Registration Form.  M.Button             -->
 <head>
 	<title>My Credentials</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="https://fonts.googleapis.com/css?family=Slabo+27px" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="MyCred.css">
-	<?PHP require "validate.php";?>
+	<?PHP require "validate.php"; include "MyCred.php";?>
 </head>
 <body>
 	<?PHP
+
 	$formData=Array("name"=>"",
 		"email"=>"",
 		"email2"=>"",
+		"password"=>"",
+		"password2"=>"",
 		"secQ"=>0,
 		"secA"=>"");
 
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		if (regFormValidate()) {
-			echo "Validation Successful!";
-		}
-		else {
-			echo "Validation Failed!";
+			regUser();
 		}
 	}
 
