@@ -11,15 +11,6 @@
 </head>
 <body>
 	<?PHP
-
-	$formData=Array("name"=>"",
-		"email"=>"",
-		"email2"=>"",
-		"password"=>"",
-		"password2"=>"",
-		"secQ"=>0,
-		"secA"=>"");
-
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		if (regFormValidate()) {
 			regUser();

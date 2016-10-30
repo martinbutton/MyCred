@@ -7,6 +7,14 @@
 include "dbControl.php";
 $dbConnect=array("host"=>"localhost","database"=>"MyCred","user"=>"MyCredApp","password"=>"password");
 
+$formData=Array("name"=>"",
+	"email"=>"",
+	"email2"=>"",
+	"password"=>"",
+	"password2"=>"",
+	"secQ"=>0,
+	"secA"=>"");
+
 /* Register a new user */
 function regUser() {
 	global $formData, $formError, $dbConnect;
