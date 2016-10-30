@@ -27,6 +27,7 @@ class dbControl {
 		}
 	}
 
+	/* Register a new user account */
 	public function regUserDb(){
 		global $formData;
 
@@ -49,6 +50,31 @@ class dbControl {
 		}
 		catch (PDOException $e) {
 			return false;
+		}
+	}
+
+	/* Check user account email address has not already been used */
+	public function emailExists($email) {
+		// Perform search in database for given email address
+		try {
+			// Prepare Select Statement
+			$sqlstm=$this->sqlconn->prepare("select email from accounts where email='" . $email . "'");
+			$sqlstm->execute();
+
+			// Set the resulting array to be associative
+			// $sqlstm->setFetchMode(PDO::FETCH_ASSOC);
+
+			// Find out if email address already exists
+			$sqlrecords=$sqlstm->fetchAll();
+
+			if (count($sqlrecords)==0) {
+				return false; // No email match found.
+			}
+			return true; // Email match found/exists.
+		}
+		catch (PDOException $e) {
+			// Return true on error.  TODO: Error logging.
+			return true;
 		}
 	}
 

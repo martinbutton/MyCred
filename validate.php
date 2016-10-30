@@ -11,7 +11,8 @@ $formError=array("name"=>"",
 	"password"=>"",
 	"password2"=>"",
 	"secQ"=>"",
-	"secA"=>"");
+	"secA"=>"",
+	"message"=>"");
 
 /* Clean user input to ensure it is safe to use */
 function clean_input($value) {

@@ -37,7 +37,8 @@
 	?>
 
 	<div class="heading">My Credentials</div>
-	<div style="text-align: center; margin-bottom: 20px;">Please complete ALL fields of the registration for below:</div>
+	<div style="text-align: center; margin-bottom: 10px;">Please complete ALL fields of the registration for below:</div>
+	<div style="text-align: center; margin-bottom: 10px;"><?PHP global $formError; echo $formError['message'];?></div>
 	
 	<form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 		Your Name:<br>
