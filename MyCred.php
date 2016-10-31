@@ -47,6 +47,22 @@ function regUser() {
 	$dbAccess->closeDb();
 }
 
+/* Log a user in */
+function loginUser() {
+	echo "User Login Function!<br>";
+	global $formData, $formError, $dbConnect;
+
+	// Check a valid allowed password has been entered
+	$formData['password']=clean_input($_POST['password']);
+	if (!validPassword($formData['password'])) {
+		$formError['message']="Incorrect Username or Password!";
+		return;
+	}
+
+	$formError['message']="";
+	echo "Proceeding to login!";
+}
+
 /* Hash Users Password */
 function hashPass($password) {
 	return password_hash($password,PASSWORD_DEFAULT);

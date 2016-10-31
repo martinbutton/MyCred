@@ -12,7 +12,11 @@
 <body>
 	<?PHP
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
-		if (regFormValidate()) {
+		if (array_key_exists("cancel", $_POST)) {
+			header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/login.php");
+		}
+
+		if (formValidate(FORM_REGISTER)) {
 			regUser();
 		}
 	}
@@ -67,8 +71,8 @@
 		<div class="errorMsg"><?PHP global $formError; echo $formError['secA'];?></div>
 
 		<div style="width: 80%; margin: auto; margin-top: 20px;">
-			<input class="formCancelBtn" type="button" name="cancel" value="cancel">
-			<input class="formSubmitBtn" type="submit" name="submit" value="register">
+			<input class="formCancelBtn" type="submit" name="cancel" value="cancel">
+			<input class="formSubmitBtn" type="submit" name="register" value="register">
 		</div>
 	</form>
 

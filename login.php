@@ -16,12 +16,11 @@
 			header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/register.php");
 		}
 
-		// echo "POST VAR: " . $_POST['register'];
-		/*
-		if (regFormValidate()) {
-			regUser();
+		if (array_key_exists("login", $_POST)) {
+			if (formValidate(FORM_LOGIN)) {
+				loginUser();
+			}
 		}
-		*/
 	}
 	?>
 

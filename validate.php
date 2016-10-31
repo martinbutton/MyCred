@@ -4,6 +4,13 @@
  * Validate Form Fields.  M.Button
  */
 
+/* Constants used to select what type of validation occurs */
+define("FORM_LOGIN",0);
+define("FORM_REGISTER",1);
+define("FORM_CHGDETAILS",2);
+define("FORM_CHANGEPWD",3);
+define("FORM_RESETPWD",4);
+
 /* Error Array */
 $formError=array("name"=>"",
 	"email"=>"",
@@ -53,79 +60,99 @@ function validPassword($password) {
 	return true;
 }
 
-function formReturnData() {
+function cleanFormData() {
 	global $formData;
-	$formData['name']=clean_input($_POST['name']);
-	$formData['email']=clean_input($_POST['email']);
-	$formData['email2']=clean_input($_POST['email2']);
-	$formData['password']=clean_input($_POST['password']);
-	$formData['password2']=clean_input($_POST['password2']);
-	$formData['secQ']=clean_input($_POST['secQ']);
-	$formData['secA']=clean_input($_POST['secA']);
-	// TODO: Only grab fields that exist.  Set other to "" depending on what form is being validated.
+	$formData['name']="";
+	$formData['email']="";
+	$formData['email2']="";
+	$formData['password']="";
+	$formData['password2']="";
+	$formData['secQ']="";
+	$formData['secA']="";
 }
 
 /* Validate Users Registration Form */
-function regFormValidate() {
+function formValidate($formType) {
 	// TODO: Select what data to select and validate against depending on what form is being validated.
 	global $formError, $formData;
 	$validForm=true;
-	formReturnData();
 
-	// Obtain and Clean form data
-	$name=$formData['name'];
-	$email=$formData['email'];
-	$email2=$formData['email2'];
-	$password=$formData['password'];
-	$password2=$formData['password2'];
-	$secQ=$formData['secQ'];
-	$secA=$formData['secA'];
+	// Clean form data buffer
+	cleanFormData();
 
 	// Validate Name
-	if (!validText($name)) {
-		$validForm=false;
- 		$formError['name']="*Error: Please enter a valid name!";
+	if ($formType===FORM_REGISTER || $formType===FORM_CHGDETAILS) {
+		$formData['name']=clean_input($_POST['name']);
+		
+		if (!validText($formData['name'])) {
+			$validForm=false;
+ 			$formError['name']="*Error: Please enter a valid name!";
+		}
 	}
 
-	// Valid Email Address Fields
-	if (!validEmail($email)) {
-		$validForm=false;
-		$formError['email']="*Error: Invalid email address!";
-	}
-	if (!validEmail($email2)) {
-		$validForm=false;
-		$formError['email2']="*Error: Invalid email address!";
+	// Valid Email Address Field
+	if ($formType===FORM_LOGIN || $formType===FORM_REGISTER || $formType===FORM_CHANGEPWD || $formType===FORM_RESETPWD) {
+		$formData['email']=clean_input($_POST['email']);
+
+		if (!validEmail($formData['email'])) {
+			$validForm=false;
+			$formError['email']="*Error: Invalid email address!";
+		}
 	}
 
-	// Check Email Addresses Match
-	if (strcmp($email,$email2)!=0) {
-		$validForm=false;
-		$formError['email2']="*Error: Email address does not match the first Email address you provided!";
+	// Validate Secondary Confirmation Email Address Field
+	if ($formType===FORM_REGISTER || $formType===FORM_CHANGEPWD || $formType===FORM_RESETPWD) {
+		$formData['email2']=clean_input($_POST['email2']);
+
+		if (!validEmail($formData['email2'])) {
+			$validForm=false;
+			$formError['email2']="*Error: Invalid email address!";
+		}
+
+		// Check Email Addresses Match
+		if (strcmp($formData['email'],$formData['email2'])!=0) {
+			$validForm=false;
+			$formError['email2']="*Error: Email address does not match the first Email address you provided!";
+		}
 	}
 
 	// Check security question and answer has been provided
-	if ($secQ==0) {
-		$validForm=false;
-		$formError['secQ']="*Error: Please select a security question from the above pull down menu! ";
+	if ($formType===FORM_REGISTER || $formType===FORM_CHGDETAILS) {
+		$formData['secQ']=clean_input($_POST['secQ']);
+
+		if ($formData['secQ']==0) {
+			$validForm=false;
+			$formError['secQ']="*Error: Please select a security question from the above pull down menu! ";
+		}
 	}
-	if (!validText($secA)) {
-		$validForm=false;
-		$formError['secA']="*Error: Please provide an answer to your security question!";
+
+	if ($formType===FORM_REGISTER || $formType===FORM_CHGDETAILS || $formType===FORM_RESETPWD) {
+		$formData['secA']=clean_input($_POST['secA']);
+
+		if (!validText($formData['secA'])) {
+			$validForm=false;
+			$formError['secA']="*Error: Please provide an answer to your security question!";
+		}
 	}
 
 	// Check passwords are valid and match
-	if (!validPassword($password)) {
-		$validForm=false;
-		$formError['password']="*Error: Password must be between 8-30 characters and should contain atleast one character and one number and may include the following characters <i>&quot;!@#$%&quot;</i>, please re-enter!";
-	}
-	if (!validPassword($password2)) {
-		$validForm=false;
-		$formError['password2']="*Error: Password must be between 8-30 characters and should contain atleast one character and one number and may include the following characters <i>&quot;!@#$%&quot;</i>, please re-enter!";
-	}
-	if (strcmp($password,$password2)!=0) {
-		$validForm=false;
-		$formError['password']="*Error: Passwords do not match, please re-enter!";
-		$formError['password2']="*Error: Passwords do not match, please re-enter!";
+	if ($formType===FORM_REGISTER || $formType===FORM_CHANGEPWD || $formType===FORM_RESETPWD) {
+		$formData['password']=clean_input($_POST['password']);
+		$formData['password2']=clean_input($_POST['password2']);
+
+		if (!validPassword($formData['password'])) {
+			$validForm=false;
+			$formError['password']="*Error: Password must be between 8-30 characters and should contain atleast one character and one number and may include the following characters <i>&quot;!@#$%&quot;</i>, please re-enter!";
+		}
+		if (!validPassword($formData['password2'])) {
+			$validForm=false;
+			$formError['password2']="*Error: Password must be between 8-30 characters and should contain atleast one character and one number and may include the following characters <i>&quot;!@#$%&quot;</i>, please re-enter!";
+		}
+		if (strcmp($formData['password'],$formData['password2'])!=0) {
+			$validForm=false;
+			$formError['password']="*Error: Passwords do not match, please re-enter!";
+			$formError['password2']="*Error: Passwords do not match, please re-enter!";
+		}
 	}
 
 	return $validForm;
