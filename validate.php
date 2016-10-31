@@ -91,7 +91,7 @@ function formValidate($formType) {
 	}
 
 	// Valid Email Address Field
-	if ($formType===FORM_LOGIN || $formType===FORM_REGISTER || $formType===FORM_CHANGEPWD || $formType===FORM_RESETPWD) {
+	if ($formType===FORM_LOGIN || $formType===FORM_REGISTER || $formType===FORM_RESETPWD) {
 		$formData['email']=clean_input($_POST['email']);
 
 		if (!validEmail($formData['email'])) {
@@ -101,7 +101,7 @@ function formValidate($formType) {
 	}
 
 	// Validate Secondary Confirmation Email Address Field
-	if ($formType===FORM_REGISTER || $formType===FORM_CHANGEPWD || $formType===FORM_RESETPWD) {
+	if ($formType===FORM_REGISTER || $formType===FORM_RESETPWD) {
 		$formData['email2']=clean_input($_POST['email2']);
 
 		if (!validEmail($formData['email2'])) {
@@ -118,7 +118,7 @@ function formValidate($formType) {
 
 	// Check security question and answer has been provided
 	if ($formType===FORM_REGISTER || $formType===FORM_CHGDETAILS) {
-		$formData['secQ']=clean_input($_POST['secQ']);
+		$formData['secQ']=(int)clean_input($_POST['secQ']);
 
 		if ($formData['secQ']==0) {
 			$validForm=false;

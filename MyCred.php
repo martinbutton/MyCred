@@ -99,6 +99,53 @@ function loginUser() {
 	header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/index.php");
 }
 
+/* Change Users Password */
+function chgPassword() {
+	global $formData, $formError, $dbConnect;
+
+	// Obtain old password value.
+	$oldPassword=clean_input($_POST['oldPassword']);
+
+	// Connect to database to check users old password is valid and to set the new password
+	$dbAccess=new dbControl($dbConnect['host'],$dbConnect['database'],$dbConnect['user'],$dbConnect['password']);
+
+	// Check if old password matches current password
+	$sqlrecords=$dbAccess->checkPassword($_SESSION['email']);
+	if ($sqlrecords==null) {
+		$formError['message']="Error retrieving account details.  Please try again.";
+		$dbAccess->closeDb();
+		return;
+	}
+
+	// Check user entry exists
+	if (count($sqlrecords)==0) {
+		$formError['message']="Error retrieving account details.  Please try again.";
+		$dbAccess->closeDb();
+		return; // No email match found.
+	}
+
+	// Compare passwords
+	reset($sqlrecords);
+	if (!password_verify($oldPassword,$sqlrecords[0]['password'])) {
+		$formError['message']="Your current password did not match the password stored on the server!";
+		$dbAccess->closeDb();
+		return;
+	}
+
+	// Hash the password
+	$formData['password']=hashPass($formData['password']);
+
+	// Change users password to their new password
+	if (!$dbAccess->changePassword($_SESSION['email'], $formData['password'])) {
+		$formError['message']="Error saving your new password on the server!  Please try again.";
+		$dbAccess->closeDb();
+		return;
+	}
+
+	$dbAccess->closeDb();
+	header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/confirm.php");
+}
+
 /* Sign user out */
 function signoutUser() {
 	session_unset();

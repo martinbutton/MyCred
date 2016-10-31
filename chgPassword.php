@@ -8,18 +8,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	if (array_key_exists("cancel", $_POST)) {
 		header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/index.php");
 	}
-/*
-	if (formValidate(FORM_REGISTER)) {
-		regUser();
+
+	if (formValidate(FORM_CHANGEPWD)) {
+		chgPassword();
 	}
-*/
+
 }
 ?>
 
 <!DOCTYPE html>
 <html>
 <!-- MyCred: User Registration and Authentication program.
-	         User Registration Form.  M.Button             -->
+	         Change Password Form.  M.Button             -->
 <head>
 	<title>My Credentials</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -29,19 +29,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
 	<div class="heading">My Credentials</div>
 	<div style="text-align: center; margin-bottom: 10px;">Change Your Password:</div>
+	<div style="text-align: center; margin-bottom: 10px; color: red;"><?PHP global $formError; echo $formError['message'];?></div>
 
 	<form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 		Please enter your current Password:<br>
+		<input class="typedInput" type="password" name="oldPassword"><br>
+
+		Please enter your new Password:<br>
 		<input class="typedInput" type="password" name="password"><br>
 		<div class="errorMsg"><?PHP global $formError; echo $formError['password'];?></div>
 
-		Please enter your new Password:<br>
+		Please enter your new Password again:<br>
 		<input class="typedInput" type="password" name="password2"><br>
 		<div class="errorMsg"><?PHP global $formError; echo $formError['password2'];?></div>
-
-		Please enter your new Password again:<br>
-		<input class="typedInput" type="password" name="oldPassword"><br>
-		<div class="errorMsg"><?PHP global $formError; echo $formError['oldPassword'];?></div>
 
 		<div style="width: 80%; margin: auto; margin-top: 40px;">
 			<input class="formCancelBtn" type="submit" name="cancel" value="cancel">
