@@ -15,6 +15,14 @@ $formData=Array("name"=>"",
 	"secQ"=>0,
 	"secA"=>"");
 
+/* Check if there is a valid session.  If not, return to login screen */
+function checkSession() {
+	// Check if session is valid.  If not, return to login screen
+	if (!isset($_SESSION['email']) || empty($_SESSION['email'])) {
+		header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/login.php");
+	}
+}
+
 /* Register a new user */
 function regUser() {
 	global $formData, $formError, $dbConnect;
@@ -89,6 +97,73 @@ function loginUser() {
 	$_SESSION['name']=$sqlrecords[0]['name'];
 	$formError['message']=""; // Clear error message string
 	header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/index.php");
+}
+
+/* Change Users Password */
+function chgPassword() {
+	global $formData, $formError, $dbConnect;
+
+	// Obtain old password value.
+	$oldPassword=clean_input($_POST['oldPassword']);
+
+	// Connect to database to check users old password is valid and to set the new password
+	$dbAccess=new dbControl($dbConnect['host'],$dbConnect['database'],$dbConnect['user'],$dbConnect['password']);
+
+	// Check if old password matches current password
+	$sqlrecords=$dbAccess->checkPassword($_SESSION['email']);
+	if ($sqlrecords==null) {
+		$formError['message']="Error retrieving account details.  Please try again.";
+		$dbAccess->closeDb();
+		return;
+	}
+
+	// Check user entry exists
+	if (count($sqlrecords)==0) {
+		$formError['message']="Error retrieving account details.  Please try again.";
+		$dbAccess->closeDb();
+		return; // No email match found.
+	}
+
+	// Compare passwords
+	reset($sqlrecords);
+	if (!password_verify($oldPassword,$sqlrecords[0]['password'])) {
+		$formError['message']="Your current password did not match the password stored on the server!";
+		$dbAccess->closeDb();
+		return;
+	}
+
+	// Hash the password
+	$formData['password']=hashPass($formData['password']);
+
+	// Change users password to their new password
+	if (!$dbAccess->changePassword($_SESSION['email'], $formData['password'])) {
+		$formError['message']="Error saving your new password on the server!  Please try again.";
+		$dbAccess->closeDb();
+		return;
+	}
+
+	$dbAccess->closeDb();
+	header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/pwdConfirm.php");
+}
+
+/* Delete Account */
+function delAccount() {
+	global $dbConnect;
+
+	// Connect to database so users account can be deleted from it
+	$dbAccess=new dbControl($dbConnect['host'],$dbConnect['database'],$dbConnect['user'],$dbConnect['password']);
+
+	if (!$dbAccess->deleteUser($_SESSION['email'])) {
+		$dbAccess->closeDb();
+		header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/index.php");
+	}
+	else {
+		// Account Successful Deleted.  Destroy session and confirm account deletion
+		$dbAccess->closeDb();
+		session_unset();
+		session_destroy();
+		header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/delConfirm.php");
+	}
 }
 
 /* Sign user out */

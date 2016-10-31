@@ -34,6 +34,7 @@ class dbControl {
 		$email=$this->escQuotes($formData['email']);
 		$password=$formData['password'];
 		$name=$this->escQuotes($formData['name']);
+		$secQ=$formData['secQ'];
 		$secA=$this->escQuotes($formData['secA']);
 
 		try {
@@ -89,6 +90,30 @@ class dbControl {
 		catch (PDOException $e) {
 			// Return false on error.  TODO: Error logging.
 			return null;
+		}
+	}
+
+	/* Change User Password */
+	public function changePassword($email, $newPassword) {
+		try {
+			$sqlstm=$this->sqlconn->prepare("update accounts set password='" . $newPassword . "' where email='" . $email . "'");
+			$sqlstm->execute();
+			return true;
+		}
+		catch (PDOException $e) {
+			return false;
+		}
+	}
+
+	/* Delete user password */
+	public function deleteUser($email) {
+		try {
+			$sqlstm=$this->sqlconn->prepare("delete from accounts where email='" . $email . "'");
+			$sqlstm->execute();
+			return true;
+		}
+		catch (PDOException $e) {
+			return false;
 		}
 	}
 
