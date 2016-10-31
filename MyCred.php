@@ -49,7 +49,6 @@ function regUser() {
 
 /* Log a user in */
 function loginUser() {
-	echo "User Login Function!<br>";
 	global $formData, $formError, $dbConnect;
 
 	// Check a valid allowed password has been entered
@@ -59,8 +58,37 @@ function loginUser() {
 		return;
 	}
 
-	$formError['message']="";
+	// Connect to database to check user exists and compare users password
+	$dbAccess=new dbControl($dbConnect['host'],$dbConnect['database'],$dbConnect['user'],$dbConnect['password']);
+
+	// Check if user account exists and check password
+	$sqlrecords=$dbAccess->checkPassword($formData['email']);
+	if ($sqlrecords==null) {
+		$formError['message']="Incorrect Username or Password!";
+		$dbAccess->closeDb();
+		return;
+	}
+
+	// Check user entry exists
+	if (count($sqlrecords)==0) {
+		return; // No email match found.
+	}
+
+	// Compare passwords
+	foreach ($sqlrecords as $sqlvalue) {
+		if (!password_verify($formData['password'],$sqlvalue['password'])) {
+			$formError['message']="Incorrect Username or Password!";
+			$dbAccess->closeDb();
+			return;
+		}
+	}
+	$dbAccess->closeDb();
+
+	// Proceed to login page.
+//	$_SESSION['email']=$formData['email'];
+	$formError['message']=""; // Clear error message string
 	echo "Proceeding to login!";
+//	header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/index.php");
 }
 
 /* Hash Users Password */
