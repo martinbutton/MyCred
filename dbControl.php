@@ -105,6 +105,18 @@ class dbControl {
 		}
 	}
 
+	/* Delete user password */
+	public function deleteUser($email) {
+		try {
+			$sqlstm=$this->sqlconn->prepare("delete from accounts where email='" . $email . "'");
+			$sqlstm->execute();
+			return true;
+		}
+		catch (PDOException $e) {
+			return false;
+		}
+	}
+
 	/* Close DB connection */
 	public function closeDb() {
 		$this->sqlconn=null;

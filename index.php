@@ -23,6 +23,9 @@ checkSession(); // Check for valid session
 		if (array_key_exists("chgpassword", $_POST)) {
 			header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/chgPassword.php");
 		}
+		if (array_key_exists("delaccount", $_POST)) {
+			header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/delDo.php");
+		}
 	}
 	?>
 

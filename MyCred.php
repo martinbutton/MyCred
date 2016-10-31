@@ -143,7 +143,27 @@ function chgPassword() {
 	}
 
 	$dbAccess->closeDb();
-	header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/confirm.php");
+	header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/pwdConfirm.php");
+}
+
+/* Delete Account */
+function delAccount() {
+	global $dbConnect;
+
+	// Connect to database so users account can be deleted from it
+	$dbAccess=new dbControl($dbConnect['host'],$dbConnect['database'],$dbConnect['user'],$dbConnect['password']);
+
+	if (!$dbAccess->deleteUser($_SESSION['email'])) {
+		$dbAccess->closeDb();
+		header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/index.php");
+	}
+	else {
+		// Account Successful Deleted.  Destroy session and confirm account deletion
+		$dbAccess->closeDb();
+		session_unset();
+		session_destroy();
+		header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/delConfirm.php");
+	}
 }
 
 /* Sign user out */
