@@ -6,19 +6,19 @@
 
 class dbControl {
 	// Object Field Variables
-	private $server,$database,$username,$password;
+	private $server,$database,$dbusername,$dbpassword;
 	private $sqlconn;
 
 	// Construct database connection
 	public function __construct($server,$database,$username,$password) {
 		$this->server=$server;
 		$this->database=$database;
-		$this->username=$username;
-		$this->password=$password;
+		$this->dbusername=$username;
+		$this->dbpassword=$password;
 	
 		// Attempt to establish connection
 		try {
-			$this->sqlconn=new PDO("mysql:host=" . $this->server . ";dbname=" . $this->database, $this->username, $this->password);
+			$this->sqlconn=new PDO("mysql:host=" . $this->server . ";dbname=" . $this->database, $this->dbusername, $this->dbpassword);
 			$this->sqlconn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
 			return $this->sqlconn;
 		}
@@ -61,9 +61,6 @@ class dbControl {
 			$sqlstm=$this->sqlconn->prepare("select email from accounts where email='" . $email . "'");
 			$sqlstm->execute();
 
-			// Set the resulting array to be associative
-			// $sqlstm->setFetchMode(PDO::FETCH_ASSOC);
-
 			// Find out if email address already exists
 			$sqlrecords=$sqlstm->fetchAll();
 
@@ -75,6 +72,23 @@ class dbControl {
 		catch (PDOException $e) {
 			// Return true on error.  TODO: Error logging.
 			return true;
+		}
+	}
+
+	/* Check if the users exists and the password matches in order to authenticate */
+	public function checkPassword($email) {
+		try {
+			// Prepare Select Statement
+			$sqlstm=$this->sqlconn->prepare("select email, name, password from accounts where email='" . $email . "'");
+			$sqlstm->execute();
+
+			// Set the resulting array to be associative
+			$sqlstm->setFetchMode(PDO::FETCH_ASSOC);
+			return $sqlstm->fetchAll();
+		}
+		catch (PDOException $e) {
+			// Return false on error.  TODO: Error logging.
+			return null;
 		}
 	}
 
