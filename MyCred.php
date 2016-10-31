@@ -15,6 +15,14 @@ $formData=Array("name"=>"",
 	"secQ"=>0,
 	"secA"=>"");
 
+/* Check if there is a valid session.  If not, return to login screen */
+function checkSession() {
+	// Check if session is valid.  If not, return to login screen
+	if (!isset($_SESSION['email']) || empty($_SESSION['email'])) {
+		header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/login.php");
+	}
+}
+
 /* Register a new user */
 function regUser() {
 	global $formData, $formError, $dbConnect;

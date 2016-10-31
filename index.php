@@ -1,11 +1,7 @@
 <?PHP
 session_start();
 require "MyCred.php";
-
-// Check if session is valid.  If not, return to login screen
-if (!isset($_SESSION['email']) || empty($_SESSION['email'])) {
-	header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/login.php");
-}
+checkSession(); // Check for valid session
 ?>
 
 <!DOCTYPE html>
@@ -23,6 +19,9 @@ if (!isset($_SESSION['email']) || empty($_SESSION['email'])) {
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		if (array_key_exists("signout", $_POST)) {
 			signoutUser();
+		}
+		if (array_key_exists("chgpassword", $_POST)) {
+			header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/chgPassword.php");
 		}
 	}
 	?>
