@@ -1,16 +1,9 @@
-<!DOCTYPE html>
-<html>
-<!-- MyCred: User Registration and Authentication program.
-	         User Login Form.  M.Button             -->
-<head>
-	<title>My Credentials</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link href="https://fonts.googleapis.com/css?family=Slabo+27px" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="MyCred.css">
-	<?PHP require "validate.php"; include "MyCred.php";?>
-</head>
-<body>
-	<?PHP
+<?PHP
+session_start();
+require "validate.php";
+include "MyCred.php";
+global $formData;
+
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		if (array_key_exists("register", $_POST)) {
 			header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/register.php");
@@ -22,6 +15,20 @@
 			}
 		}
 	}
+?>
+
+<!DOCTYPE html>
+<html>
+<!-- MyCred: User Registration and Authentication program.
+	         User Login Form.  M.Button             -->
+<head>
+	<title>My Credentials</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://fonts.googleapis.com/css?family=Slabo+27px" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="MyCred.css">
+</head>
+<body>
+	<?PHP
 	?>
 
 	<div class="heading">My Credentials</div>

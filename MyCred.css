@@ -88,3 +88,20 @@ select {
 	color: red;
 	margin-bottom: 10px;
 }
+
+.accountMenuBtn {
+	padding: 10px;
+	border: 2px solid #0000dd;
+	border-radius: 5px;
+	margin-bottom: 10px;
+	width: 100%;
+	text-align: center;
+	background-color: white;
+	font-size: 18px;
+}
+
+.accountMenuBtn:hover {
+	cursor: pointer;
+	background-color: #ffffaa;
+	color: #0000dd;
+}

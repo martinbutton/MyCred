@@ -1,4 +1,4 @@
-<?PHP
+<?PHP session_start();
 /*
  * MyCred: User Registration and Authentication program.
  * Frontend Callers.  M.Button
@@ -27,11 +27,12 @@ function regUser() {
 
 	// Check if user account exists and if not, register user
 	if (!$dbAccess->emailExists($formData['email'])) {
-		// Attempt to register user
+		// Attempt to login user
 		if ($dbAccess->regUserDb()) {
 			// Establish Session and login to Account Actions Menu
 			$dbAccess->closeDb();
 			$_SESSION['email']=$formData['email'];
+			$_SESSION['name']=$formData['name'];
 			$formError['message']=""; // Clear error message string
 			header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/index.php");
 		 }
@@ -75,20 +76,26 @@ function loginUser() {
 	}
 
 	// Compare passwords
-	foreach ($sqlrecords as $sqlvalue) {
-		if (!password_verify($formData['password'],$sqlvalue['password'])) {
-			$formError['message']="Incorrect Username or Password!";
-			$dbAccess->closeDb();
-			return;
-		}
+	if (!password_verify($formData['password'],$sqlrecords[0]['password'])) {
+		$formError['message']="Incorrect Username or Password!";
+		$dbAccess->closeDb();
+		return;
 	}
-	$dbAccess->closeDb();
 
 	// Proceed to login page.
-//	$_SESSION['email']=$formData['email'];
+	$dbAccess->closeDb();
+	reset($sqlrecords);
+	$_SESSION['email']=$sqlrecords[0]['email'];
+	$_SESSION['name']=$sqlrecords[0]['name'];
 	$formError['message']=""; // Clear error message string
-	echo "Proceeding to login!";
-//	header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/index.php");
+	header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/index.php");
+}
+
+/* Sign user out */
+function signoutUser() {
+	session_unset();
+	session_destroy();
+	header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/login.php");
 }
 
 /* Hash Users Password */

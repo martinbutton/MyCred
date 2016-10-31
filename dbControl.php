@@ -79,7 +79,7 @@ class dbControl {
 	public function checkPassword($email) {
 		try {
 			// Prepare Select Statement
-			$sqlstm=$this->sqlconn->prepare("select email, password from accounts where email='" . $email . "'");
+			$sqlstm=$this->sqlconn->prepare("select email, name, password from accounts where email='" . $email . "'");
 			$sqlstm->execute();
 
 			// Set the resulting array to be associative
