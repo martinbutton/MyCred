@@ -34,7 +34,7 @@ if (!isset($_SESSION['email']) || empty($_SESSION['email'])) {
 
 	<div style="text-align: center; margin-bottom: 10px; margin-top: 20px;">Accounts Action Menu</div>
 	<form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-		<div style="margin: auto; width: 50%;">
+		<div style="margin: auto; width: 80%;">
 			<input class="accountMenuBtn" type="submit" name="chgdetails" value="Change Details">
 			<input class="accountMenuBtn" type="submit" name="chgpassword" value="Change Password">
 			<input class="accountMenuBtn" type="submit" name="delaccount" value="Delete Account">
