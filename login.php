@@ -45,7 +45,7 @@ global $formData;
 		<div class="errorMsg"><?PHP global $formError; echo $formError['password'];?></div>
 
 		<div style="padding-top: 10px; text-align: center; font-size: 14px;">
-			Click <a href="">here</a> if you have forgotton your password!
+			Demo Authentication Program
 		</div>
 
 		<div style="width: 80%; margin: auto; margin-top: 20px;">
