@@ -11,6 +11,7 @@
 </head>
 <body>
 	<?PHP
+	// Handle Post Requests
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		if (array_key_exists("cancel", $_POST)) {
 			header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/login.php");

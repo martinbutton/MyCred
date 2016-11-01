@@ -1,7 +1,7 @@
 <?PHP
 /*
  * MyCred: User Registration and Authentication program.
- * Database Routines.  M.Button
+ *         Database Routines.  M.Button
  */
 
 class dbControl {

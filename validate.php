@@ -1,7 +1,7 @@
 <?PHP
 /*
  * MyCred: User Registration and Authentication program.
- * Validate Form Fields.  M.Button
+ *         Validate Form Fields.  M.Button
  */
 
 /* Constants used to select what type of validation occurs */
@@ -26,8 +26,6 @@ function clean_input($value) {
 
 /* Check if a valid email address has been entered */
 function validEmail($email) {
-	global $formError;
-
 	if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
   		return false;
   	}
@@ -68,7 +66,6 @@ function cleanFormData() {
 
 /* Validate Users Registration Form */
 function formValidate($formType) {
-	// TODO: Select what data to select and validate against depending on what form is being validated.
 	global $formError, $formData;
 	$validForm=true;
 
@@ -79,7 +76,7 @@ function formValidate($formType) {
 	if ($formType===FORM_REGISTER) {
 		$formData['name']=clean_input($_POST['name']);
 		
-		if (!validText($formData['name'])) {
+		if (!validText($formData['name']) || strlen($formData['name'])>250) {
 			$validForm=false;
  			$formError['name']="*Error: Please enter a valid name!";
 		}
@@ -89,7 +86,7 @@ function formValidate($formType) {
 	if ($formType===FORM_LOGIN || $formType===FORM_REGISTER) {
 		$formData['email']=clean_input($_POST['email']);
 
-		if (!validEmail($formData['email'])) {
+		if (!validEmail($formData['email']) || strlen($formData['email'])>250) {
 			$validForm=false;
 			$formError['email']="*Error: Invalid email address!";
 		}
@@ -99,7 +96,7 @@ function formValidate($formType) {
 	if ($formType===FORM_REGISTER) {
 		$formData['email2']=clean_input($_POST['email2']);
 
-		if (!validEmail($formData['email2'])) {
+		if (!validEmail($formData['email2']) || strlen($formData['email2'])>250) {
 			$validForm=false;
 			$formError['email2']="*Error: Invalid email address!";
 		}

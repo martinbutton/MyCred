@@ -1,6 +1,12 @@
 <?PHP
+/*
+ * MyCred: User Registration and Authentication program.
+ *         Account Deletion Completion Page.  M.Button
+ */
+
 include "MyCred.php";
 
+// Handle Post Request
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	if (array_key_exists("okay", $_POST)) {
 		header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/login.php");
@@ -10,8 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html>
-<!-- MyCred: User Registration and Authentication program.
-	         Account Successfully Deleted.  M.Button             -->
+<!-- Account Successfully Deleted. -->
 <head>
 	<title>My Credentials</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">

@@ -1,10 +1,14 @@
-<?PHP session_start();
+<?PHP
 /*
  * MyCred: User Registration and Authentication program.
- * Frontend Callers.  M.Button
+ *         Frontend Callers.  M.Button
  */
 
+// Start session and obtain backend functions
+session_start();
 include "dbControl.php";
+
+// CHANGE AS REQUIRED: DB Connection and Credentials
 $dbConnect=array("host"=>"localhost","database"=>"MyCred","user"=>"MyCredApp","password"=>"password");
 
 $formData=Array("name"=>"",
@@ -173,7 +177,7 @@ function delAccount() {
 		header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/index.php");
 	}
 	else {
-		// Account Successful Deleted.  Destroy session and confirm account deletion
+		// Account Successfully Deleted.  Destroy session and confirm account deletion
 		$dbAccess->closeDb();
 		session_unset();
 		session_destroy();
