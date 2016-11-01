@@ -1,25 +1,20 @@
 <?PHP
 /*
  * MyCred: User Registration and Authentication program.
- * Validate Form Fields.  M.Button
+ *         Validate Form Fields.  M.Button
  */
 
 /* Constants used to select what type of validation occurs */
 define("FORM_LOGIN",0);
 define("FORM_REGISTER",1);
-define("FORM_CHGDETAILS",2);
-define("FORM_CHANGEPWD",3);
-define("FORM_RESETPWD",4);
+define("FORM_CHANGEPWD",2);
 
 /* Error Array */
 $formError=array("name"=>"",
 	"email"=>"",
 	"email2"=>"",
 	"password"=>"",
-	"password2"=>"",
-	"secQ"=>"",
-	"secA"=>"",
-	"message"=>"");
+	"password2"=>"");
 
 /* Clean user input to ensure it is safe to use */
 function clean_input($value) {
@@ -31,8 +26,6 @@ function clean_input($value) {
 
 /* Check if a valid email address has been entered */
 function validEmail($email) {
-	global $formError;
-
 	if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
   		return false;
   	}
@@ -73,7 +66,6 @@ function cleanFormData() {
 
 /* Validate Users Registration Form */
 function formValidate($formType) {
-	// TODO: Select what data to select and validate against depending on what form is being validated.
 	global $formError, $formData;
 	$validForm=true;
 
@@ -81,30 +73,30 @@ function formValidate($formType) {
 	cleanFormData();
 
 	// Validate Name
-	if ($formType===FORM_REGISTER || $formType===FORM_CHGDETAILS) {
+	if ($formType===FORM_REGISTER) {
 		$formData['name']=clean_input($_POST['name']);
 		
-		if (!validText($formData['name'])) {
+		if (!validText($formData['name']) || strlen($formData['name'])>250) {
 			$validForm=false;
  			$formError['name']="*Error: Please enter a valid name!";
 		}
 	}
 
 	// Valid Email Address Field
-	if ($formType===FORM_LOGIN || $formType===FORM_REGISTER || $formType===FORM_RESETPWD) {
+	if ($formType===FORM_LOGIN || $formType===FORM_REGISTER) {
 		$formData['email']=clean_input($_POST['email']);
 
-		if (!validEmail($formData['email'])) {
+		if (!validEmail($formData['email']) || strlen($formData['email'])>250) {
 			$validForm=false;
 			$formError['email']="*Error: Invalid email address!";
 		}
 	}
 
 	// Validate Secondary Confirmation Email Address Field
-	if ($formType===FORM_REGISTER || $formType===FORM_RESETPWD) {
+	if ($formType===FORM_REGISTER) {
 		$formData['email2']=clean_input($_POST['email2']);
 
-		if (!validEmail($formData['email2'])) {
+		if (!validEmail($formData['email2']) || strlen($formData['email2'])>250) {
 			$validForm=false;
 			$formError['email2']="*Error: Invalid email address!";
 		}
@@ -116,27 +108,8 @@ function formValidate($formType) {
 		}
 	}
 
-	// Check security question and answer has been provided
-	if ($formType===FORM_REGISTER || $formType===FORM_CHGDETAILS) {
-		$formData['secQ']=(int)clean_input($_POST['secQ']);
-
-		if ($formData['secQ']==0) {
-			$validForm=false;
-			$formError['secQ']="*Error: Please select a security question from the above pull down menu! ";
-		}
-	}
-
-	if ($formType===FORM_REGISTER || $formType===FORM_CHGDETAILS || $formType===FORM_RESETPWD) {
-		$formData['secA']=clean_input($_POST['secA']);
-
-		if (!validText($formData['secA'])) {
-			$validForm=false;
-			$formError['secA']="*Error: Please provide an answer to your security question!";
-		}
-	}
-
 	// Check passwords are valid and match
-	if ($formType===FORM_REGISTER || $formType===FORM_CHANGEPWD || $formType===FORM_RESETPWD) {
+	if ($formType===FORM_REGISTER || $formType===FORM_CHANGEPWD) {
 		$formData['password']=clean_input($_POST['password']);
 		$formData['password2']=clean_input($_POST['password2']);
 

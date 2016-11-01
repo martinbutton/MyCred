@@ -1,9 +1,15 @@
 <?PHP
+/* MyCred: User Registration and Authentication program.
+ *	       User Login Form.  M.Button
+ */
+
+// Start session and obtain backend functions
 session_start();
 require "validate.php";
 include "MyCred.php";
 global $formData;
 
+	// Handle Post Requests
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		if (array_key_exists("register", $_POST)) {
 			header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/register.php");
@@ -19,8 +25,7 @@ global $formData;
 
 <!DOCTYPE html>
 <html>
-<!-- MyCred: User Registration and Authentication program.
-	         User Login Form.  M.Button             -->
+<!-- Login Screen -->
 <head>
 	<title>My Credentials</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -45,7 +50,7 @@ global $formData;
 		<div class="errorMsg"><?PHP global $formError; echo $formError['password'];?></div>
 
 		<div style="padding-top: 10px; text-align: center; font-size: 14px;">
-			Click <a href="">here</a> if you have forgotton your password!
+			Demo Authentication Program
 		</div>
 
 		<div style="width: 80%; margin: auto; margin-top: 20px;">

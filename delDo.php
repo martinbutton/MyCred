@@ -1,9 +1,16 @@
 <?PHP
+/*
+ * MyCred: User Registration and Authentication program.
+ *         Account Deletion Confirmation Page.  M.Button
+ */
+
+// Start session and obtain backend functions
 session_start();
 require "validate.php";
 include "MyCred.php";
 checkSession(); // Check for valid session
 
+// Handle Post Requests
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	if (array_key_exists("cancel", $_POST)) {
 		header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/index.php");
@@ -16,8 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html>
-<!-- MyCred: User Registration and Authentication program.
-	         Confirm Account Deletion.  M.Button             -->
+<!-- Confirm Account Deletion From User. -->
 <head>
 	<title>My Credentials</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -35,8 +41,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 	<form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 		<div style="width: 80%; margin: auto; margin-top: 20px;">
-			<input class="formCancelBtn" type="submit" name="cancel" value="cancel">
-			<input class="formSubmitBtn" type="submit" name="delete" value="continue">
+			<input class="formCancelBtn" type="submit" name="cancel" value="no">
+			<input class="formSubmitBtn" type="submit" name="delete" value="yes">
 		</div>
 	</form>
 

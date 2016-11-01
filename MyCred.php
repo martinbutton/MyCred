@@ -1,10 +1,14 @@
-<?PHP session_start();
+<?PHP
 /*
  * MyCred: User Registration and Authentication program.
- * Frontend Callers.  M.Button
+ *         Frontend Callers.  M.Button
  */
 
+// Start session and obtain backend functions
+session_start();
 include "dbControl.php";
+
+// CHANGE AS REQUIRED: DB Connection and Credentials
 $dbConnect=array("host"=>"localhost","database"=>"MyCred","user"=>"MyCredApp","password"=>"password");
 
 $formData=Array("name"=>"",
@@ -31,12 +35,15 @@ function regUser() {
 	$formData['password']=hashPass($formData['password']);
 
 	// Connect to database
-	$dbAccess=new dbControl($dbConnect['host'],$dbConnect['database'],$dbConnect['user'],$dbConnect['password']);
+	if (($dbAccess=new dbControl($dbConnect['host'],$dbConnect['database'],$dbConnect['user'],$dbConnect['password']))==null) {
+		$formError['message']="Error connecting to database! Please try again.";
+		return;
+	}
 
 	// Check if user account exists and if not, register user
 	if (!$dbAccess->emailExists($formData['email'])) {
 		// Attempt to login user
-		if ($dbAccess->regUserDb()) {
+		if ($dbAccess->regUser()) {
 			// Establish Session and login to Account Actions Menu
 			$dbAccess->closeDb();
 			$_SESSION['email']=$formData['email'];
@@ -68,7 +75,10 @@ function loginUser() {
 	}
 
 	// Connect to database to check user exists and compare users password
-	$dbAccess=new dbControl($dbConnect['host'],$dbConnect['database'],$dbConnect['user'],$dbConnect['password']);
+	if (($dbAccess=new dbControl($dbConnect['host'],$dbConnect['database'],$dbConnect['user'],$dbConnect['password']))==null) {
+		$formError['message']="Error connecting to database! Please try again.";
+		return;
+	}
 
 	// Check if user account exists and check password
 	$sqlrecords=$dbAccess->checkPassword($formData['email']);
@@ -80,6 +90,8 @@ function loginUser() {
 
 	// Check user entry exists
 	if (count($sqlrecords)==0) {
+		$formError['message']="Incorrect Username or Password!";
+		$dbAccess->closeDb();
 		return; // No email match found.
 	}
 
@@ -107,7 +119,10 @@ function chgPassword() {
 	$oldPassword=clean_input($_POST['oldPassword']);
 
 	// Connect to database to check users old password is valid and to set the new password
-	$dbAccess=new dbControl($dbConnect['host'],$dbConnect['database'],$dbConnect['user'],$dbConnect['password']);
+	if (($dbAccess=new dbControl($dbConnect['host'],$dbConnect['database'],$dbConnect['user'],$dbConnect['password']))==null) {
+		$formError['message']="Error connecting to database! Please try again.";
+		return;
+	}
 
 	// Check if old password matches current password
 	$sqlrecords=$dbAccess->checkPassword($_SESSION['email']);
@@ -151,14 +166,18 @@ function delAccount() {
 	global $dbConnect;
 
 	// Connect to database so users account can be deleted from it
-	$dbAccess=new dbControl($dbConnect['host'],$dbConnect['database'],$dbConnect['user'],$dbConnect['password']);
+	if (($dbAccess=new dbControl($dbConnect['host'],$dbConnect['database'],$dbConnect['user'],$dbConnect['password']))==null) {
+		$formError['message']="Error connecting to database! Please try again.";
+		return;
+	}
 
+	// Delete user entry from database
 	if (!$dbAccess->deleteUser($_SESSION['email'])) {
 		$dbAccess->closeDb();
 		header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/index.php");
 	}
 	else {
-		// Account Successful Deleted.  Destroy session and confirm account deletion
+		// Account Successfully Deleted.  Destroy session and confirm account deletion
 		$dbAccess->closeDb();
 		session_unset();
 		session_destroy();

@@ -11,6 +11,7 @@
 </head>
 <body>
 	<?PHP
+	// Handle Post Requests
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		if (array_key_exists("cancel", $_POST)) {
 			header("Location: http://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] . "/MyCred/login.php");
@@ -18,15 +19,6 @@
 
 		if (formValidate(FORM_REGISTER)) {
 			regUser();
-		}
-	}
-
-	/* Re-selects the choosen security question when form is reloaded */
-	function optChecked($opt) {
-		global $formData;
-
-		if ($opt==$formData['secQ']) {
-			echo "selected";
 		}
 	}
 	?>
@@ -55,20 +47,6 @@
 		Please enter your Password again:<br>
 		<input class="typedInput" type="password" name="password2"><br>
 		<div class="errorMsg"><?PHP global $formError; echo $formError['password2'];?></div>
-
-		Please select a security Question:<br>
-		<select name="secQ">
-			<option value="0" <?PHP optChecked(0);?>>Please select</option>
-			<option value="1" <?PHP optChecked(1);?>>What is your mother maiden mame?</option>
-			<option value="2" <?PHP optChecked(2);?>>What is the name of your first pet?</option>
-			<option value="3" <?PHP optChecked(3);?>>What town were you born in?</option>
-			<option value="4" <?PHP optChecked(4);?>>What is your favorite film?</option>
-		</select><br>
-		<div class="errorMsg"><?PHP global $formError; echo $formError['secQ'];?></div>
-
-		Please enter in a short answer to your security question:<br>
-		<input class="typedInput" type="text" name="secA" value="<?PHP echo $formData['secA'];?>"><br>
-		<div class="errorMsg"><?PHP global $formError; echo $formError['secA'];?></div>
 
 		<div style="width: 80%; margin: auto; margin-top: 20px;">
 			<input class="formCancelBtn" type="submit" name="cancel" value="cancel">

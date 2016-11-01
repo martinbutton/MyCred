@@ -1,7 +1,7 @@
 <?PHP
 /*
  * MyCred: User Registration and Authentication program.
- * Database Routines.  M.Button
+ *         Database Routines.  M.Button
  */
 
 class dbControl {
@@ -28,23 +28,19 @@ class dbControl {
 	}
 
 	/* Register a new user account */
-	public function regUserDb(){
+	public function regUser(){
 		global $formData;
 
 		$email=$this->escQuotes($formData['email']);
 		$password=$formData['password'];
 		$name=$this->escQuotes($formData['name']);
-		$secQ=$formData['secQ'];
-		$secA=$this->escQuotes($formData['secA']);
 
 		try {
-			$sqlstm=$this->sqlconn->prepare("insert into accounts (email, password, name, secQ, secA)"
-											. " values (:email, :password, :name, :secQ, :secA)");
+			$sqlstm=$this->sqlconn->prepare("insert into accounts (email, password, name)"
+											. " values (:email, :password, :name)");
 			$sqlstm->bindParam(':email', $email);
 			$sqlstm->bindParam(':password', $password);
 			$sqlstm->bindParam(':name', $name);
-			$sqlstm->bindParam(':secQ', $secQ);
-			$sqlstm->bindParam(':secA', $secA);
 
 			$sqlstm->execute();
 			return true;

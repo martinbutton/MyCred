@@ -1,4 +1,9 @@
 <?PHP
+/* MyCred: User Registration and Authentication program.
+ *         Account Menu.  M.Button
+ */
+
+// Start session and obtain backend functions
 session_start();
 require "MyCred.php";
 checkSession(); // Check for valid session
@@ -6,8 +11,7 @@ checkSession(); // Check for valid session
 
 <!DOCTYPE html>
 <html>
-<!-- MyCred: User Registration and Authentication program.
-	         User Registration Form.  M.Button             -->
+<!-- Account Action Menu -->
 <head>
 	<title>My Credentials</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,6 +20,7 @@ checkSession(); // Check for valid session
 </head>
 <body>
 	<?PHP
+	// Handle Menu Selections
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		if (array_key_exists("signout", $_POST)) {
 			signoutUser();
@@ -37,7 +42,6 @@ checkSession(); // Check for valid session
 	<div style="text-align: center; margin-bottom: 10px; margin-top: 20px;">Accounts Action Menu</div>
 	<form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 		<div style="margin: auto; width: 80%;">
-			<input class="accountMenuBtn" type="submit" name="chgdetails" value="Change Details">
 			<input class="accountMenuBtn" type="submit" name="chgpassword" value="Change Password">
 			<input class="accountMenuBtn" type="submit" name="delaccount" value="Delete Account">
 			<input class="accountMenuBtn" type="submit" name="signout" value="Signout">

@@ -1,4 +1,10 @@
 <?PHP
+/*
+ * MyCred: User Registration and Authentication program.
+ *         Change Password Completion Page  M.Button
+ */
+
+// Start session and obtain backend functions
 session_start();
 require "validate.php";
 include "MyCred.php";
@@ -13,8 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html>
-<!-- MyCred: User Registration and Authentication program.
-	         Change Password Form.  M.Button             -->
+<!-- Change Password Completion Page -->
 <head>
 	<title>My Credentials</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
